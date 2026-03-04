@@ -1,0 +1,12 @@
+/* Allow zerotier-cli to be executed with pkexec with auth_admin_keep */
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.policykit.exec") {
+        var program = action.lookup("program");
+        if (program && program.indexOf("zerotier-cli") >= 0) {
+            if (subject.isInGroup("wheel") || subject.isInGroup("sudo")) {
+                polkit.log("rnctl: Allowing zerotier-cli with AUTH_ADMIN_KEEP");
+                return polkit.Result.AUTH_ADMIN_KEEP;
+            }
+        }
+    }
+});

@@ -1,16 +1,75 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
 
-rnctl/rnctl
-rnctl/cmd/rnctl-cli/rnctl-cli
-rnctl/build/bin/
-
+# Test binary, built with `go test -c`
 *.test
+
+# Output of the go coverage tool
 *.out
 
-rnctl/frontend/node_modules/
-rnctl/frontend/dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Go workspace file
+go.work
 
-*.log
-/rnctl/test/temp_auth_*
+# Dependency directories
+vendor/
+
+# Build directories
+build/
+dist/
+AppDir/
+ZimaClient.AppDir/
+
+# Compiled binaries (except AppImage)
+rnctl-cli
+rnctl-test
+appimagetool
+
+# Frontend dependencies and lock files
+frontend/node_modules/
+frontend/bun.lock
+frontend/package-lock.json
+frontend/package.json.md5
+
+# Test and temporary directories
+test/
+zima-app/
+zima-extracted/
+zima-source/
+
+# Docker container IDs and temporary files
+[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]
+Running
+Using
+
+# Build scripts
+# build-appimage.sh
+build-appimage-simple.sh
+# build-fixed.sh
+build-packages.sh
+docker-build.sh
+test-docker-build.sh
+test_network.sh
+
+# Documentation files (optional - uncomment if you don't want to track them)
+# *.md
+# !README.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Wails build info
+wails.json
+
+ZimaClient-x86_64.AppImage

@@ -1,0 +1,3 @@
+# rnctl sudoers configuration
+# Allow wheel group to run mount/umount and zerotier-cli without password
+%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount, /usr/bin/umount, /usr/bin/zerotier-cli

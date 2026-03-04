@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=rnctl
+Comment=Remote Network Control Tool
+Exec=/usr/local/bin/rnctl
+Icon=network-workgroup
+Terminal=false
+Type=Application
+Categories=Network;Utility;

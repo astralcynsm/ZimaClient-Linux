@@ -1,0 +1,80 @@
+# 多阶段构建 Dockerfile - 用于生成更小的最终镜像
+# 注意：这个版本用于构建独立的容器镜像，不是用于本地编译
+
+# ============ 构建阶段 ============
+FROM ubuntu:20.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai
+
+WORKDIR /build
+
+# 安装构建依赖
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    pkg-config \
+    curl \
+    wget \
+    git \
+    ca-certificates \
+    libwebkit2gtk-4.0-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Go
+ENV GO_VERSION=1.21.6
+RUN wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
+    rm go${GO_VERSION}.linux-amd64.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOPATH="/go"
+ENV PATH="${GOPATH}/bin:${PATH}"
+
+# 安装 Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# 安装 Wails
+RUN go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+# 复制源代码
+COPY . /build/
+
+# 构建应用
+RUN wails build -clean -platform linux/amd64
+
+# ============ 运行阶段 ============
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 只安装运行时依赖
+RUN apt-get update && apt-get install -y \
+    libwebkit2gtk-4.0-37 \
+    libgtk-3-0 \
+    libayatana-appindicator3-1 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建非 root 用户
+RUN useradd -m -s /bin/bash zimaclient
+
+# 从构建阶段复制二进制文件
+COPY --from=builder /build/build/bin/rnctl /usr/local/bin/rnctl
+
+# 设置权限
+RUN chmod +x /usr/local/bin/rnctl
+
+# 切换到非 root 用户
+USER zimaclient
+WORKDIR /home/zimaclient
+
+# 运行应用
+CMD ["/usr/local/bin/rnctl"]

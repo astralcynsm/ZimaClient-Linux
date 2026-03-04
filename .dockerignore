@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+
+# Build outputs
+build/
+dist/
+*.AppImage
+*.deb
+*.rpm
+
+# Node modules
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+tmp/
+
+# Test files
+test/
+
+# Documentation (optional, uncomment if you want to exclude)
+# *.md
+# docs/
+
+# Extracted/downloaded files
+zima-extracted/
+zima-source/
+Zima-*.exe
+ZimaClient-*.AppImage
+appimagetool
+
+# AppDir (will be regenerated)
+AppDir/

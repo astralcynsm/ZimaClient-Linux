@@ -1,0 +1,65 @@
+version: 1
+
+script:
+  # 移除不需要的文件以减小体积
+  - rm -rf AppDir/usr/share/man
+  - rm -rf AppDir/usr/share/doc
+
+AppDir:
+  path: ./AppDir
+
+  app_info:
+    id: com.zima.client
+    name: ZimaClient
+    icon: zimaclient
+    version: 0.1.0
+    exec: usr/bin/zimaclient
+    exec_args: $@
+
+  apt:
+    arch: amd64
+    sources:
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse'
+        key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
+
+    include:
+      - cifs-utils
+      - smbclient
+      - zenity
+      - libgtk-3-0
+      - libwebkit2gtk-4.0-37
+      - libayatana-appindicator3-1
+
+  files:
+    exclude:
+      - usr/share/man
+      - usr/share/doc/*/README.*
+      - usr/share/doc/*/changelog.*
+      - usr/share/doc/*/NEWS.*
+      - usr/share/doc/*/TODO.*
+
+  runtime:
+    env:
+      APPDIR_LIBRARY_PATH: $APPDIR/usr/lib/x86_64-linux-gnu:$APPDIR/usr/lib
+
+  test:
+    fedora-30:
+      image: appimagecrafters/tests-env:fedora-30
+      command: ./AppRun
+    debian-stable:
+      image: appimagecrafters/tests-env:debian-stable
+      command: ./AppRun
+    archlinux-latest:
+      image: appimagecrafters/tests-env:archlinux-latest
+      command: ./AppRun
+    centos-7:
+      image: appimagecrafters/tests-env:centos-7
+      command: ./AppRun
+    ubuntu-xenial:
+      image: appimagecrafters/tests-env:ubuntu-xenial
+      command: ./AppRun
+
+AppImage:
+  arch: x86_64
+  update-information: guess
+  sign-key: None
